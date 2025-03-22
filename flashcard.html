@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flashcards</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Space Mono', monospace;
+    }
+    body {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5) 1px, transparent 1px), 
+                        linear-gradient(90deg, rgba(0, 0, 0, 0.5) 1px, transparent 1px);
+      background-size: 50px 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1em 2em;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background-color: transparent;
+    }
+
+    .logo {
+      font: "VT323", monospace;
+      font-size: 50px;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 15px;
+      position: absolute;
+      top: 20px;
+      right: 100px;
+    }
+
+    /* Navigation Buttons */
+    nav {
+      display: flex;
+      gap: 15px;
+    }
+
+    .nav-btn {
+      background-color: white;
+      color: black;
+      border: 2px solid black;
+      font-size: 1.5em;
+      text-decoration: none;
+      padding: 8px;
+      border-radius: 50px;
+      transition: 0.3s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 45px;
+      height: 45px;
+    }
+
+    /* Hover Effect to Show Titles */
+    .nav-btn:hover::after {
+      content: attr(title);
+      position: absolute;
+      bottom: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 5px 10px;
+      font-size: 0.8em;
+      border-radius: 5px;
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover {
+      background-color: black;
+      color: white;
+    }
+
+    h3 {
+      margin-top: 150px;
+      text-align: center;
+    }
+
+    .container {
+      position: relative;
+      width: 500px;
+      height: 400px;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .flashcard {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: lightblue;
+      border-radius: 25px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 20px;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform 0.5s;
+    }
+
+    .flashcard.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .front,
+    .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 25px;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .back {
+      transform: rotateY(180deg);
+      background: orange;
+    }
+
+    .topic {
+      font-size: 25px;
+      font-weight: bold;
+      color: #555;
+      margin-bottom: 30px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .content {
+      width: 100%;
+    }
+
+    /* Triangle Buttons (Navigation) */
+    .nav-container {
+      position: absolute;
+      bottom: -60px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+
+    .triangle-btn {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      cursor: pointer;
+      background: transparent;
+      border-color: transparent;
+    }
+
+    .left-triangle {
+      border-width: 30px 40px 30px 0;
+      border-color: transparent lightblue transparent transparent;
+    }
+
+    .right-triangle {
+      border-width: 30px 0 30px 40px;
+      border-color: transparent transparent transparent orange;
+    }
+
+    /* Footer */
+    .footer {
+            width: 100%;
+            text-align: center;
+            padding: 15px;
+            font-size: 16px;
+            margin-top: 350px;
+            font-weight: bold;
+            background: white;
+            border-top: 2px solid black;
+        }
+
+        .footer-links {
+            margin-top: 10px;
+        }
+
+        .footer-links a {
+            color: black;
+            text-decoration: none;
+            margin: 0 12px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .footer-links a:hover {
+            transform: translateY(-2px);
+            text-decoration: underline;
+        }
+
+
+  </style>
+</head>
+<body>
+    <header>
+        <div class="logo">CodeCracked</div>
+        <div class="header-buttons">
+          <nav>
+              <a href="index.html" class="nav-btn" title="Back">
+                <i class="fa-solid fa-arrow-left"></i>
+              </a>
+              <a href="lesson.html" class="nav-btn" title="Lesson">
+                <i class="fas fa-book"></i>
+              </a>
+              <a href="debugging.html" class="nav-btn" title="Debugging">
+                <i class="fa-solid fa-desktop"></i>
+              </a>
+            </nav>
+        </div>
+      </header>
+
+  <h3>CLICK THE CENTER TO FLIP THE CARD! ARROW TO CHANGE QUESTION!</h3>
+
+  <div class="container">
+    <div class="flashcard" id="card">
+      <div class="front" id="question"></div>
+      <div class="back" id="answer"></div>
+    </div>
+
+    <!-- Triangle Buttons Outside -->
+    <div class="nav-container">
+      <div class="triangle-btn left-triangle" id="backBtn"></div>
+      <div class="triangle-btn right-triangle" id="nextBtn"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>© 2025 CodeCracked. All Rights Reserved.</p>
+    <div class="footer-links">
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="rules.html">Rules & Regulations</a>
+    </div>
+</footer>
+
+  <script>
+    const flashcards = [
+      { topic: "HTML Elements", question: "What is an HTML element?", answer: "An HTML element is a building block of a webpage defined by a start tag, content, and an end tag." },
+      { topic: "CSS Selectors", question: "How do you select an element by its class in CSS?", answer: "By using a dot before the class name: .classname" },
+      { topic: "JavaScript", question: "What does 'let' do in JavaScript?", answer: "'let' declares a block-scoped variable." }
+    ];
+
+    let currentIndex = 0;
+    const card = document.getElementById("card");
+    const questionEl = document.getElementById("question");
+    const answerEl = document.getElementById("answer");
+
+    function updateFlashcard(index) {
+      const flashcard = flashcards[index];
+      questionEl.innerHTML = `<div class="topic">${flashcard.topic}</div><div class="content">${flashcard.question}</div>`;
+      answerEl.innerHTML = `<div class="topic">${flashcard.topic}</div><div class="content">${flashcard.answer}</div>`;
+    }
+
+    updateFlashcard(currentIndex);
+
+    card.addEventListener("click", () => {
+      card.classList.toggle("flipped");
+    });
+
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % flashcards.length;
+      updateFlashcard(currentIndex);
+    });
+
+    document.getElementById("backBtn").addEventListener("click", () => {
+      currentIndex = (currentIndex - 1 + flashcards.length) % flashcards.length;
+      updateFlashcard(currentIndex);
+    });
+  </script>
+</body>
+</html>
